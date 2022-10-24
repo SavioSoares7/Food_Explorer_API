@@ -1,17 +1,11 @@
 const express = require("express");
 const app = express();
 
+const routes = require("./routes");
+
 app.use(express.json());
 
-app.post("/", (req, res) => {
-  const { name, email, password } = req.body;
-
-  res.json({
-    name,
-    email,
-    password,
-  });
-});
+app.use(routes);
 
 const PORT = 3000;
 app.listen(PORT, () => console.log("Server is running at PORT " + PORT));
