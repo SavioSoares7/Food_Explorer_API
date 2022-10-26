@@ -1,6 +1,6 @@
 const knex = require("../database/knex");
 
-const { hash } = require("bcryptjs");
+const { hash, compare } = require("bcryptjs");
 
 class SingUp {
   async create(req, res) {
@@ -24,6 +24,12 @@ class SingUp {
       password: hashedPassword,
     });
     res.json({ name, email, password });
+  }
+  async update(req, res) {
+    const { name, email, password, old_password } = req.body;
+    const { id } = req.query;
+
+    res.json({ name, email, password, old_password, id });
   }
 }
 
