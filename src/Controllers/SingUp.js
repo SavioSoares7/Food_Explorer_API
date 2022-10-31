@@ -29,7 +29,40 @@ class SingUp {
     const { name, email, password, old_password } = req.body;
     const { id } = req.query;
 
-    res.json({ name, email, password, old_password, id });
+    const userId = await knex("registerUsers").where({ id: id });
+
+    if (userId.length < 1) {
+      res.status(404).json({ error: "Usuário não encontrado" });
+    }
+
+    const checkEmail = await knex("registerUsers").where({ email: email });
+
+    if (checkEmail[0].id != id) {
+      res.status(400).json({ error: "Email já está sendo utilizado" });
+    }
+    if (!old_password) {
+      res.status(404).json({ error: "Por favor preencha a senha antiga" });
+    }
+
+    const checkOldPassword = await compare(old_password, userId[0].password);
+
+    if (!checkOldPassword) {
+      res
+        .status(400)
+        .json({ error: "Por favor informe a senha antiga corretamente" });
+    }
+
+    const hashedPassword = await hash(password, 8);
+
+    const userUpdate = {
+      name: name ?? userId[0].name,
+      email: email ?? userId[0].email,
+      password: hashedPassword,
+    };
+
+    await knex("registerUsers").update(userUpdate).where({ id: id });
+
+    res.json(userId);
   }
 }
 
