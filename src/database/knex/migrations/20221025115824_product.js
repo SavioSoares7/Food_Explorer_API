@@ -3,6 +3,7 @@ exports.up = (knex) =>
     table.increments("id");
     table.text("banner");
     table.text("name");
+    table.text("category");
     table.text("ingredient");
     table.text("description");
     table.float("price");
