@@ -2,9 +2,10 @@ const { Router } = require("express");
 
 const routerProduct = Router();
 
-const ProductRegistration = require("../Controllers/ProductRegistration");
-const productRegistration = new ProductRegistration();
+const Product = require("../Controllers/Product");
+const product = new Product();
 
-routerProduct.post("/", productRegistration.create);
+routerProduct.post("/", product.create);
+routerProduct.delete("/:id", product.delete);
 
 module.exports = routerProduct;

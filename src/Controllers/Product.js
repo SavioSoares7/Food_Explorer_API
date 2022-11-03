@@ -1,6 +1,6 @@
 const knex = require("../database/knex");
 
-class ProductRegistration {
+class Product {
   async create(req, res) {
     const { banner, name, category, ingredient, description, price } = req.body;
 
@@ -27,6 +27,19 @@ class ProductRegistration {
     await knex("product").insert(addProduct);
     res.json(addProduct);
   }
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const product = await knex("product").where({ id });
+
+    if (product.length < 1) {
+      res.status(404).json({ error: "Item não encontrado" });
+    }
+
+    await knex("product").where({ id }).del();
+    res.json({ id });
+  }
 }
 
-module.exports = ProductRegistration;
+module.exports = Product;
