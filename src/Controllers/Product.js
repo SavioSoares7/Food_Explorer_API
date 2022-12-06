@@ -40,6 +40,14 @@ class Product {
     await knex("product").where({ id }).del();
     res.json({ id });
   }
+
+  async read(req, res) {
+    const { name } = req.query;
+
+    const products = await knex("product").whereLike("name", `%${name}%`);
+
+    res.json({ products });
+  }
 }
 
 module.exports = Product;
